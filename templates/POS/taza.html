@@ -1,0 +1,158 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صرف منتج طازة</title>
+    <link href="{%static 'css/bootstrap.css'%}" rel="stylesheet">
+    <script src="{%static 'js/bootstrap.bundle.js'%}"></script>
+    <script src="{% static 'js/jquery-3.7.1.min.js' %}"></script>
+    <link href="{%static 'css/taza.css'%}" rel="stylesheet">
+
+    <script>
+        // Function to dynamically add input fields for additional members
+        function submitForm() {
+            var form = document.getElementById("Form");
+            var formData = new FormData(form);
+            var jsonData = {};
+            formData.forEach(function (value, key) {
+                if (key !== 'member_name' && key !== 'member_type') {
+
+                    jsonData[key] = value;
+                }
+            });
+
+
+            fetch('monsaraf-youm', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    "X-CSRFToken": "{{ csrf_token }}"
+                },
+                body: JSON.stringify(jsonData)
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('Success:', data);
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            function updateSeasonAndDay() {
+                var dateInput = document.getElementById('id_date');
+                var seasonInput = document.getElementById('id_season');
+                var dayInput = document.getElementById('id_day');
+
+                // Get the selected date
+                var selectedDate = new Date(dateInput.value);
+
+                // Determine the season based on the selected date
+                var month = selectedDate.getMonth() + 1; // January is 0
+                var season = (month >= 4 && month <= 11) ? 'صيف' : 'شتاء';
+                seasonInput.value = season;
+
+                // Determine the day in Arabic
+                var arabicDays = ['الاحد', 'الاتنين', 'الثلاثاء', 'الاربعاء', 'الخميس', 'الجمعة', 'السبت'];
+                var dayIndex = selectedDate.getDay(); // 0 for Sunday, 1 for Monday, etc.
+                dayInput.value = arabicDays[dayIndex];
+            }
+
+            // Attach the updateSeasonAndDay function to the input event of the date input
+            document.getElementById('id_date').addEventListener('input', updateSeasonAndDay);
+
+            // Call the function once on page load to initialize the values
+            updateSeasonAndDay();
+        });
+
+    </script>
+</head>
+
+<body style="background-image: url('{% static 'img\1logo trans25.png'%}');">
+
+    <header>
+        <div class="logo1">
+            <img src="{% static 'img\1notext.png'%}" width="80" height="80" alt="">
+        </div>
+        <div class="mytitle">
+            <h2>الامن المركزي</h2>
+        </div>
+        <div class="logo2">
+            <img src="{% static 'img\1notext.png'%}" width="80" height="80" alt="">
+        </div>
+    </header>
+    <hr>
+    <form id="Form" method="post" action="" class="container">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label for="{{ form.recruits_count.id_for_label }}" class="form-label">عدد المجندين</label>
+            {{ form.recruits_count }}
+        </div>
+        <div class="mb-3">
+            <label for="{{form.workers_count.id_for_label }}" class="form-label">عدد الافراد</label>
+            {{ form.workers_count }}
+        </div>
+
+
+        <div class="mb-3">
+            <label for="{{ form.officers_count.id_for_label }}" class="form-label">عدد الضباط</label>
+            {{ form.officers_count }}
+        </div>
+
+        <div class="mb-3">
+            <label for="{{ form.azen.id_for_label }}" class="form-label">رقم الأذن</label>
+            {{ form.azen }}
+        </div>
+
+        <div class="mb-3">
+            <label for="form.wagba.id_for_label" class="form-label">نوع الوجبة</label>
+            {{form.wagba}}
+        </div>
+
+
+        <div class="row mb-3">
+            <div class="col-4">
+                <label for="{{ form.season.id_for_label }}" class="form-label">اختر الموسم</label>
+                {{ form.season }}
+            </div>
+            <div class="col-4">
+                <label for="{{ form.day.id_for_label}}" class="form-label">اختر اليوم</label>
+                {{ form.day }}
+            </div>
+
+            <div class="col-4">
+                <label for="{{ form.date.id_for_label }}" class="form-label">تاريخ الصرف</label>
+                {{ form.date }}
+            </div>
+        </div>
+
+
+
+        <div class="mb-3">
+            <button type="submit" class="btn btn-primary btn-lg" id="submit_button" onclick="submitForm()">حفظ</button>
+            <button type="reset" class="btn btn-secondary btn-lg">مسح</button>
+        </div>
+    </form>
+    <hr>
+    <footer>
+        <p id="currentDate" style="display: flex; align-items: center; justify-content: center;"></p>
+
+        <script>
+            var currentDate = new Date();
+            var options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            var formattedDate = currentDate.toLocaleDateString('ar-EG', options);
+            document.getElementById("currentDate").textContent = "التاريخ: " + formattedDate;
+        </script>
+    </footer>
+</body>
+
+</html>

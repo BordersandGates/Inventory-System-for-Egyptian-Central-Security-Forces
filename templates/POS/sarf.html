@@ -1,0 +1,57 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صرف المنتجات</title>
+    <link href="{%static 'css/bootstrap.css'%}" rel="stylesheet">
+    <script src="{%static 'js/bootstrap.bundle.js'%}"></script>
+      <link rel="stylesheet" href="{%static 'css/sarf.css'%}">
+    <title>Document</title>
+</head>
+<body style="background-image: url('{% static 'img\1logo trans25.png'%}');">
+    <header class="header">
+        <div class="logo1">
+            <img src="{% static 'img\1notext.png'%}" width="80" height="80" alt="">
+            </div>
+            <div class="mytitle">
+            <h2>الامن المركزي</h2>
+            </div>
+            <div class="logo2">
+            <img src="{% static 'img\1notext.png'%}" width="80" height="80"  alt="">
+        </div>
+    </header>
+    <hr>
+    <section>
+        <div class="butt1">
+            <a href="http://127.0.0.1:8000/taza" class="butt">طازة</a>
+        </div>
+        <div class="butt2">
+            <a href="http://127.0.0.1:8000/gafa" class="butt">جاف</a>
+        </div>
+        <div class="butt3">
+            <a href="http://127.0.0.1:8000/tarfeh" class="butt">ترفية</a>
+        </div>
+    </section> 
+    <hr>
+    <footer>
+        <footer>
+            <p id="currentDate"></p>
+            <script>
+              // Get the current date
+              var currentDate = new Date();
+          
+              // Options for formatting the date in Arabic
+              var options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+          
+              // Format the date in Arabic
+              var formattedDate = currentDate.toLocaleDateString('ar-EG', options);
+          
+              // Display the formatted date on the webpage
+              document.getElementById("currentDate").textContent = "التاريخ: "+ formattedDate;
+            </script>
+          </footer>
+    </footer>
+</body>
+</html>

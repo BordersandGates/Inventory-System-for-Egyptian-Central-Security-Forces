@@ -1,0 +1,98 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="{%static 'css/homepage.css'%}">
+
+  <link href="{%static 'css/bootstrap.css'%}" rel="stylesheet">
+  <script src="{%static 'js/bootstrap.bundle.js'%}"></script>
+  <link rel="stylesheet" href="{%static 'css/sarf.css'%}">
+
+  <title>التقارير</title>
+</head>
+
+<body style="background-image: url('{% static 'img\1logo trans25.png'%}');">
+  <header class="header">
+      <div class="logo1">
+          <img src="{% static 'img\1notext.png'%}" width="80" height="80" alt="">
+          </div>
+          <div class="mytitle">
+          <h2>الامن المركزي</h2>
+          </div>
+          <div class="logo2">
+          <img src="{% static 'img\1notext.png'%}" width="80" height="80"  alt="">
+      </div>
+  </header>
+  <hr>
+<form action="{% url 'takarer' %}" method="POST" class="container">
+    {% csrf_token %}
+    <div class="row align-items-center flex-row-reverse m-3">
+      <div class="col-3">
+        <label for="takrer_type" class="form-label">نوع التقرير</label>
+        <select name="takrer_type" class="form-select" id = "takrer_type" , name = "takrer_type">
+          <option>تقرير صرف طازة</option>
+          <option>تقرير صرف جاف</option>
+          <option>تقرير صرف ترفيه</option>
+        </select>
+      </div>
+      <div class="col-3">
+        <label for="azen_number">رقم اذن الصرف</label>
+        <input type="number" class="form-control"id="azen_number" name="azen_number">
+      </div>
+      <div class="col-2 mt-2">
+        <button class="btn btn-primary" type="submit">عرض التقرير</button>
+      </div>
+    </div>
+  </form>
+
+  <form action="{% url 'takarer_esthlak' %}" method="POST" class="container">
+    {% csrf_token %}
+    <div class="row align-items-center  flex-row-reverse m-3">
+      <div class="col-3">
+        <label for="takrer_type" class="form-label">نوع التقرير</label>
+        <select name="takrer-select" class=form-select id = "takrer_type" , name = "takrer_type">
+          <option>تقرير استهلاك طازة</option>
+          <option>تقرير استهلاك جاف</option>
+          <option>تقرير استهلاك ترفيه</option>
+        </select>
+      </div>
+      <div class="col-2">
+        <label for="start_date">من</label>
+        <input type="date" class="form-control"id="start_date" name="start_date">
+      </div>
+      <div class="col-2">
+        <label for="end_date">الى</label>
+        <input type="date" class="form-control"id="end_date" name="end_date" >
+      </div>
+      <div class="col-2 mt-2">
+        <button class="btn  btn-primary" type="submit">عرض التقرير</button>
+      </div>
+    </div>
+  </form>
+  <hr>
+  <footer>
+      <footer>
+          <p id="currentDate"></p>
+          <script>
+            // Get the current date
+            var currentDate = new Date();
+        
+            // Options for formatting the date in Arabic
+            var options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+        
+            // Format the date in Arabic
+            var formattedDate = currentDate.toLocaleDateString('ar-EG', options);
+        
+            // Display the formatted date on the webpage
+            document.getElementById("currentDate").textContent = "التاريخ: "+ formattedDate;
+          </script>
+        </footer>
+  </footer>
+
+
+
+</body>
+</html>

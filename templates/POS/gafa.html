@@ -1,0 +1,183 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صرف منتج جاف</title>
+    <link href="{%static 'css/bootstrap.css'%}" rel="stylesheet">
+    <script src="{%static 'js/bootstrap.bundle.js'%}"></script>
+    <link rel="stylesheet" href="{%static 'css/tarfeh.css'%}">
+    <script>
+        const memberNames = JSON.parse('{{ member_names_json|escapejs }}');
+
+        function addMemberInput() {
+            // Create new input fields
+            const memberContainer = document.createElement("div");
+            memberContainer.classList.add("row", "mb-3", "align-items-center", "flex-row-reverse");
+
+            const nameContainer = document.createElement("div")
+            nameContainer.classList.add("col-7", "mx-2");
+
+            const nameLabel = document.createElement("label");
+            nameLabel.textContent = "اسم العضو";
+            nameLabel.classList.add("form-label");
+
+            const nameInput = document.createElement("select");
+            nameInput.classList.add("form-select");
+            nameInput.name = 'member_name';
+
+            // Populate the select field with member names
+            memberNames.forEach(name => {
+                const option = document.createElement("option");
+                option.value = name;
+                option.textContent = name;
+                nameInput.appendChild(option);
+            });
+
+            nameContainer.appendChild(nameLabel);
+            nameContainer.appendChild(nameInput);
+
+            memberContainer.appendChild(nameContainer);
+            const container = document.getElementById("membersContainer");
+            container.appendChild(memberContainer);
+        }
+
+
+
+        function submitForm() {
+            var form = document.getElementById("Form");
+            var formData = new FormData(form);
+            var jsonData = {};
+            var members = [];
+            var nameInputs = document.getElementsByName('member_name');
+            nameInputs.forEach(function (nameInput) {
+                var selectedOption = nameInput.options[nameInput.selectedIndex];
+                var member = {};
+                member.name = selectedOption.value;
+                members.push(member);
+            });
+            formData.forEach(function (value, key) {
+                if (key !== 'member_name' && key !== 'member_type') {
+
+                    jsonData[key] = value;
+                }
+            });
+
+            // Add members array to main jsonData
+            jsonData.members = members;
+
+
+            fetch('monsaraf-task', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    "X-CSRFToken": "{{ csrf_token }}"
+                },
+                body: JSON.stringify(jsonData)
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('Success:', data);
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        }
+
+    </script>
+    <title>Document</title>
+</head>
+
+<body style="background-image: url('{% static 'img\1logo trans25.png'%}');">
+    <header>
+        <div class="logo1">
+            <img src="{% static 'img\1notext.png'%}" width="80" height="80" alt="">
+        </div>
+        <div class="mytitle">
+            <h2>الامن المركزي</h2>
+        </div>
+        <div class="logo2">
+            <img src="{% static 'img\1notext.png'%}" width="80" height="80" alt="">
+        </div>
+    </header>
+    <hr>
+    <section>
+        <form class="container" method="post" id="Form">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label for="{{ form.task_duration.id_for_label }}." class="form-label">عدد ايام المأمورية</label>
+                {{form.task_duration}}
+            </div>
+            <div class="mb-3">
+                <label for="{{ form.recruit_count.id_for_label }}" class="form-label">عدد المجندين</label>
+                {{form.recruit_count}}
+            </div>
+
+            <div class="mb-3">
+                <label for="{{ form.worker_count.id_for_label }}" class="form-label">عدد الافراد</label>
+                {{form.worker_count}}
+            </div>
+
+
+            <div class="mb-3">
+                <label for="{{ form.officer_count.id_for_label }}" class="form-label">عدد الضباط</label>
+                {{form.officer_count}}
+            </div>
+
+            <div class="row">
+                <div class="col-4">
+                    <label for="{{ form.azen.id_for_label }}" class="form-label">رقم الأذن</label>
+                    {{form.azen}}
+                </div>
+                <div class=col-4>
+                    <label for="{{ form.date.id_for_label }}" class="form-label">تاريخ الصرف</label>
+                    {{form.date}}
+                </div>
+                <div class=col-4>
+                    <label for="{{ form.location.id_for_label }}" class="form-label">مكان المأمورية</label>
+                    {{form.location}}
+                </div>
+            </div>
+            <div class="mb-3" id="membersContainer">
+
+            </div>
+
+            <button type="button" class="btn btn-secondary btn-md" id="add_member_button"
+                onclick="addMemberInput()">اضافة
+                ظابط او فرد</button>
+
+
+            <div class="d-grid gap-4 d-md-block mt-3">
+                <button type="submit" class="btn btn-primary btn-lg me-2" onclick="submitForm()">حفظ</button>
+                <button type="reset" class="btn btn-secondary btn-lg ">مسح</button>
+            </div>
+        </form>
+    </section>
+    <hr>
+    <footer>
+        <p id="currentDate"></p>
+
+        <script>
+            // Get the current date
+            var currentDate = new Date();
+
+            // Options for formatting the date in Arabic
+            var options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+
+            // Format the date in Arabic
+            var formattedDate = currentDate.toLocaleDateString('ar-EG', options);
+
+            // Display the formatted date on the webpage
+            document.getElementById("currentDate").textContent = "التاريخ: " + formattedDate;
+        </script>
+    </footer>
+</body>
+
+</html>

@@ -1,0 +1,103 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مرتجع</title>
+    <link href="{%static 'css/bootstrap.css'%}" rel="stylesheet">
+    <script src="{%static 'js/bootstrap.bundle.js'%}"></script>
+      <link rel="stylesheet" href="{%static 'css/tarfeh.css'%}">
+    <script>
+
+        function submitForm() {
+    var form = document.getElementById("Form");
+    var formData = new FormData(form);
+    var jsonData = {};
+    formData.forEach(function (value, key) {
+        jsonData[key] = value;
+    });
+    
+    fetch('mortgaa-add', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            "X-CSRFToken": "{{ csrf_token }}"
+        },
+        body: JSON.stringify(jsonData)
+    })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log('Success:', data);
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+}
+
+    </script>
+    <title>Document</title>
+</head>
+
+<body style="background-image: url('{% static 'img\1logo trans25.png'%}');">
+    <header>
+        <div class="logo1">
+            <img src="{% static 'img\1notext.png'%}" width="80" height="80" alt="">
+        </div>
+        <div class="mytitle">
+            <h2>الامن المركزي</h2>
+        </div>
+        <div class="logo2">
+            <img src="{% static 'img\1notext.png'%}" width="80" height="80" alt="">
+        </div>
+    </header>
+    <hr>
+    <section>
+        <form class="container" method="post" id = "Form">
+            {% csrf_token %}
+            <div class="row">
+
+                <div class="col -6 ">
+                    <label for="{{ form.azen.id_for_label }}" class="form-label">رقم اذن المأمورية</label>
+                    {{form.azen}}
+                </div>
+                <div class="col-6 ">
+                    <label for="{{ form.date.id_for_label }}" class="form-label">تاريخ الارحاع</label>
+                    {{form.date}}
+                </div>
+            </div>
+
+            
+            <div class="d-grid gap-4 d-md-block mt-3">
+            <button type="submit" class="btn btn-primary btn-lg me-2" onclick="submitForm()">حفظ</button>
+            <button type="reset" class="btn btn-secondary btn-lg ">مسح</button>
+            </div>
+        </form>
+    </section>
+    <hr>
+    <footer>
+        <p id="currentDate"></p>
+
+        <script>
+            // Get the current date
+            var currentDate = new Date();
+
+            // Options for formatting the date in Arabic
+            var options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+
+            // Format the date in Arabic
+            var formattedDate = currentDate.toLocaleDateString('ar-EG', options);
+
+            // Display the formatted date on the webpage
+            document.getElementById("currentDate").textContent = "التاريخ: " + formattedDate;
+        </script>
+    </footer>
+</body>
+
+</html>

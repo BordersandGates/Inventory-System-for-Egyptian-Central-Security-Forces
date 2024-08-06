@@ -1,0 +1,69 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="{%static 'css/bootstrap.css'%}" rel="stylesheet">
+    <script src="{%static 'js/bootstrap.bundle.js'%}"></script>
+    <link rel="stylesheet" href="{%static 'css/sarf.css'%}">
+
+    <title>المتعهد</title>
+</head>
+
+<body style="background-image: url('{% static 'img\1logo trans25.png'%}');">
+    <header class="header">
+        <div class="logo1">
+            <img src="{% static 'img\1notext.png'%}" width="80" height="80" alt="">
+            </div>
+            <div class="mytitle">
+            <h2>الامن المركزي</h2>
+            </div>
+            <div class="logo2">
+            <img src="{% static 'img\1notext.png'%}" width="80" height="80"  alt="">
+        </div>
+    </header>
+    <hr>
+
+    <form action="{% url 'motaahed' %}" method="POST">
+        {% csrf_token %}
+        <div class="row mb-3  align-items-start justify-content-center flex-row-reverse">
+            <div class="col-5">
+                <label for="start_date">ادخل تاريخ البداية</label>
+                <input type="date" class="form-control" id="start_date" name="start_date">
+            </div>
+            <div class="col-5">
+                <label for="end_date">ادخل تاريخ النهاية</label>
+                <input type="date" class="form-control" id="end_date" name="end_date">
+            </div>
+            <div class="col-2 align-self-center">
+                <button type="submit" class="btn btn-primary">بحث</button>
+            </div>
+        </div>
+    </form>
+
+    <footer>
+        <footer>
+            <p id="currentDate"></p>
+            <script>
+              // Get the current date
+              var currentDate = new Date();
+          
+              // Options for formatting the date in Arabic
+              var options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+          
+              // Format the date in Arabic
+              var formattedDate = currentDate.toLocaleDateString('ar-EG', options);
+          
+              // Display the formatted date on the webpage
+              document.getElementById("currentDate").textContent = "التاريخ: "+ formattedDate;
+            </script>
+          </footer>
+    </footer>
+
+    
+</html>

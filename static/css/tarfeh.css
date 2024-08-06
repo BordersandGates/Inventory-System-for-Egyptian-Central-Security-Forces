@@ -1,0 +1,20 @@
+header{
+    display: flex;
+    justify-content: space-between;
+    align-items:center;
+}
+body{
+    color: rgb(255, 255, 255);
+    background-color: #3c3c3c;
+    background-size: cover;
+    background-size: 50%;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.mytitle{
+    font-family: 'Sriracha', cursive;
+    color: #c4941c;
+    font-size: 20px;
+}

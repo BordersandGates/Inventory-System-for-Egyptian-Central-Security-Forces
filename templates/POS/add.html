@@ -1,0 +1,178 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>اضافة منتج</title>
+  <link rel="stylesheet" href="{%static 'css/bootstrap.css'%}">
+  <script src="{%static 'js/bootstrap.bundle.js'%}"></script>
+  <link rel="stylesheet" href="{%static 'css/addpage.css'%}" />
+  <script src="{% static 'js/jquery-3.7.1.min.js' %}"></script>
+
+  <script>
+    $(document).ready(function () {
+      var formCounter = 1;
+
+      $("#add-product").click(function () {
+        var newForm = $(".product-form:first").clone();
+        newForm.find(":input").each(function () {
+          var oldName = $(this).attr("name");
+        });
+
+        formCounter++;
+        newForm.appendTo("#product-forms");
+      });
+
+      $(document).on("click", "#delete-product", function () {
+        $(this).closest(".product-form").remove();
+        formCount--;
+      });
+
+      $("#submit-forms").click(function (event) {
+        var formDataArray = [];
+
+        // Loop through all forms and collect their data
+        $(".product-form").each(function () {
+          var formData = {};
+          $(this)
+            .find(":input")
+            .each(function () {
+              formData[$(this).attr("name")] = $(this).val();
+            });
+          formDataArray.push(formData);
+        });
+        $.ajax({
+          method: "POST",
+          url: "all",
+          data: JSON.stringify(formDataArray),
+          contentType: "application/json",
+          headers: {
+            "X-CSRFToken": "{{ csrf_token }}",
+          },
+          success: function (response) {
+            console.log(formDataArray);
+            event.preventDefault();
+          },
+          error: function (error) {
+            console.error(error);
+          },
+        });
+      });
+    });
+  </script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const productFormsContainer = document.querySelector("#product-forms");
+
+    productFormsContainer.addEventListener("input", function (event) {
+      const totalQuantityInput = event.target;
+
+      if (totalQuantityInput && totalQuantityInput.matches("#id_total_quantity")) {
+        const productForm = totalQuantityInput.closest(".product-form");
+        const expiryDateField = productForm.querySelector("#id_expiry_date");
+        const azenField = productForm.querySelector("#id_azen");
+        if (totalQuantityInput.value == 0 && totalQuantityInput.value != "") {
+          expiryDateField.disabled = true;
+          azenField.disabled = true;
+        } else {
+          expiryDateField.disabled = false;
+          azenField.disabled = false;
+        }
+      }
+    });
+  });
+</script>
+
+</head>
+<header class="header">
+  <div class="logo1">
+    <img src="{% static 'img\1notext.png'%}" width="80" height="80" alt="" />
+  </div>
+  <div class="mytitle">
+    <h2>الامن المركزي</h2>
+  </div>
+  <div class="logo2">
+    <img src="{% static 'img\1notext.png'%}" width="80" height="80" alt="" />
+  </div>
+</header>
+<hr />
+
+<body style="background-image: url('{% static 'img\1logotrans25.png'%}')">
+  <form method="post" action="">
+    {% csrf_token %}
+    <div id="product-forms">
+      <div class="product-form">
+        <div style="margin-bottom: 10px" class="formlabels">
+          <div class="row ms-4">
+            <div class="col-4">
+              <label for="{{form.product_name.id_for_label }}" class="form-label">اسم المنتج
+              </label>
+              {{ form.product_name }}
+            </div>
+            <div class="col-2">
+              <label for="{{ form.azen.id_for_label }}" class="form-label">رقم الأذن</label>
+              {{ form.azen }}
+            </div>
+            <div class="col-2">
+              <label for="{{ form.expiry_date.id_for_label }}" class="form-label">
+                تاريخ انتهاء الصلاحية
+              </label>
+              {{ form.expiry_date }}
+            </div>
+            <div class="col-3">
+              <label for="{{ form.total_quantity.id_for_label }}" class="form-label">كمية المنتج بالكيلو او الوحدة
+              </label>
+              {{ form.total_quantity }}
+            </div>
+            <div class="col-1 mt-4">
+              <button type="button" class="btn btn-md btn-secondary" id="delete-product">
+                مسح
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <br>
+
+    <div class="d-grid gap-2 d-md-block">
+      <button type="button" id="add-product" class="btn btn-secondary btn-lg"
+        style="width: fit-content; height: fit-content;">
+        اضافة منتج
+      </button>
+      <button type="submit" id="submit-forms" class="btn btn-primary btn-lg"
+        style="width: fit-content; height: fit-content;">
+        حفظ
+      </button>
+    </div>
+  </form>
+  <hr />
+
+  <footer>
+    <p id="currentDate"></p>
+    <script>
+      // Get the current date
+      var currentDate = new Date();
+
+      // Options for formatting the date in Arabic
+      var options = {
+        weekday: "long",
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+      };
+
+      // Format the date in Arabic
+      var formattedDate = currentDate.toLocaleDateString("ar-EG", options);
+
+      // Display the formatted date on the webpage
+      document.getElementById("currentDate").textContent =
+        "التاريخ: " + formattedDate;
+    </script>
+  </footer>
+</body>
+
+</html>

@@ -1,0 +1,87 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<!DOCTYPE html>
+<html lang="en">
+    {% block style %}
+    <style>
+        
+            th{
+                vertical-align:middle !important;
+            }
+            tbody {
+                font-size: 15px !important;
+                font-weight: 400 !important;
+                line-height: .9 !important;
+                border: 2px solid black; 
+            }
+            .table{
+                width:133%!important;
+                margin-bottom: .1rem !important;
+                border: 2px solid black; 
+                border-color:black!important;
+                color:black!important;
+            }
+            body{
+                line-height: .9!important;
+                font-size: 15px !important;
+                font-weight: 400 !important;
+            }
+
+    </style>
+
+    {% endblock %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="{%static 'css/bootstrap.css'%}" rel="stylesheet">
+    <script src="{%static 'js/bootstrap.bundle.js'%}"></script>
+
+    <title>الرصيد اليومي</title>
+
+</head>
+
+<body style="width:75% ;height:75%; align-items: center;">
+    <center><h3 style=" padding-left:200px!important">الرصيد اليومي</h3></center>
+    <table class="table  table-hover table-bordered  ">
+        <thead>
+            <tr>
+                <th>الكميات</th>
+                <th>تاريخ انتهاء الصلاحية</th>
+                <th>اسم المنتج</th>
+                <th>رقم الاذن</th>
+
+            </tr>
+        </thead>
+        <tbody>
+            {% for product_name, data in products_data.items %}
+
+
+            {% for product_info in data %}
+            <tr>
+                <td>{{ product_info.quantity }}</td>
+                <td>{{ product_info.expiration_date }}</td>
+                <td>{{ product_name }}</td>
+
+                <td>{{ product_info.product.azen }}</td>
+
+            </tr>
+            {% endfor %}
+            <!-- Display total quantity for the current product name -->
+            {% with total_quantity=data|length %}
+            <tr>
+                <td class="table-active"><strong>{{ data.0.total_quantity }}</strong></td>
+                <td class="table-active" colspan="3"><strong>الاجمالي</strong></td>
+
+            </tr>
+            {% endwith %}
+        
+            {%endfor%}
+
+        </tbody>
+    </table>
+
+</body>
+
+</html>

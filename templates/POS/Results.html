@@ -1,0 +1,127 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en" dir="rtl">
+    {% block style %}
+    <style>
+        
+            tbody {
+                font-family: Arial, sans-serif !important;
+                font-size: 15px !important;
+                font-weight: 400 !important;
+                line-height: .6 !important;
+                border: 2px solid black; 
+            }
+            .table{
+                width:130%!important;
+                margin-bottom: .3rem !important;
+                border: 2px solid black; 
+                border-color:black!important;
+                color:black!important;
+            }
+            body{
+                line-height: .6!important;
+                
+            }
+    
+    </style>
+    {% endblock %}
+    
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="{%static 'css/bootstrap.css'%}" rel="stylesheet">
+    <script src="{%static 'js/bootstrap.bundle.js'%}"></script>
+    <title>النتائج</title>
+</head>
+
+<body style="width:75% ;height:80%; align-items: center; ">
+    
+    <center><h3 style="padding-right:112px;">يومية صرف التعيينات</h3></center>
+    
+
+    <table class="table table-hover table-bordered">
+        <tbody>
+            {% for key, value in meta_data.items %}
+            {% if forloop.counter0|divisibleby:3 %}
+            <tr>
+            {% endif %}
+            <th>{{ key }}</th>
+            <td>{{ value }}</td>
+            {% if forloop.counter|divisibleby:3 or forloop.last %}
+            </tr>
+            {% endif %}
+            {% endfor %}
+        </tbody>
+    </table>
+
+     <table class="table  table-hover table-bordered table-hover ">
+
+        <thead>
+        
+            <tr>
+                <th style="width:10%" rowspan="1">م</th>
+                <th style="width:20%" rowspan="1">الصنف</th>
+                <th style="width:20%"colspan="1">مقرر الضباط</th>
+                <th style="width:30%" colspan="1">مقرر الأفراد و المجندين</th>
+                <th style="width:20%"colspan="1">إجمالى الكمية</th>
+            </tr>
+        </thead>
+      
+        <tbody>
+            {% for product_name, product_sum in products_data.items %}
+            {% if product_name != 'اسماء الاعضاء' %}
+
+            <tr>
+                <td>{{forloop.counter}}</td>
+                <td>{{ product_name }}</td>
+                <td>{{ product_sum.1 }} </td>
+                <td>{{ product_sum.2 }}</td>
+                <td>{{ product_sum.0 }}</td>
+                
+                
+            </tr>
+            {%endif%}
+            {%endfor%}
+        </tbody>
+    </table>
+
+    {% if members %}
+    <table class="table table-striped table-hover">
+        <thead>
+            <tr>
+                <th>نوع العضو</th>
+                <th>اسم العضو</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for member in members %}
+                <tr>
+                    <td>{{ member.name }}</td>
+                    <td>{{ member.type }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {%endif%} 
+    <table class="table table-striped table-hover">
+    <tr>
+        <th>رئيس وحدة التعيينات</th>
+        <th style="padding-left: 20px;">ضابط عظيم</th>
+        <th style="padding-left: 20px;">ضابط منوب</th>
+        <th style="padding-left: 20px;">ضابط الأمن</th>
+        <th style="padding-left: 20px;">كاتب الشطب</th>
+    </tr>
+    <tr>
+        <th>.................</th>
+        <th>.................</th>
+        <th>.................</th>
+        <th>.................</th>
+        <th>.................</th>
+    </tr>
+    </table>
+</body>
+
+
+</html>

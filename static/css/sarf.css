@@ -1,0 +1,54 @@
+header{
+    display: flex;
+    justify-content: space-between;
+    align-items:center;
+}
+body{
+    color: rgb(255, 255, 255);
+    background-color: #3c3c3c;
+    background-size: cover;
+    background-size: 50%;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+section{
+    display: flex;
+    justify-content: space-between;
+    align-items:center;
+    height: 500px;
+}
+.mytitle{
+    font-family: 'Sriracha', cursive;
+    color: #c4941c;
+    font-size: 20px;
+}
+.butt1{
+    background-color: #302f49;
+    width: 150px;
+    height: 70px;
+    text-align: center;
+    border-radius: 40px;
+}
+
+.butt2{
+    background-color: #302f49;
+    width: 150px;
+    height: 70px;
+    text-align: center;
+    border-radius: 40px;
+}
+
+.butt3{
+    background-color: #302f49;
+    width: 150px;
+    height: 70px;
+    text-align:center;
+    border-radius: 40px;
+}
+
+.butt{
+    color:rgb(255, 255, 255); 
+    text-decoration: none;
+    font-size: 50px;
+}
